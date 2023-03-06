@@ -1,30 +1,28 @@
-import * as dotenv from "dotenv";
-import { request } from "@octokit/request";
-
-dotenv.config();
+import github from "./github/index.js";
 
 main();
 async function main() {
   try {
-    console.log("Fetching PRs...");
-    const { data: pulls } = await request('GET /repos/{owner}/{repo}/pulls', {
-      headers: {
-        authorization: `token ${process.env.GITHUB_TOKEN}`,
-      },
-      owner: 'shopstory-ai',
-      repo: 'shopstory',
-    });
+    const repository = ['shopstory-ai', 'shopstory'] as const;
+    const pullRequestNumber = 1208;
 
-    console.dir(pulls[0]);
+    console.log("Fetching pull request...");
+    const pullRequest = await github.fetchPullRequest(...repository, pullRequestNumber);
+    console.dir(pullRequest);
 
-    const { data: commits } = await request(`GET ${pulls[0]._links.commits.href.replace("https://api.github.com", "")}`, {
-      headers: {
-        authorization: `token ${process.env.GITHUB_TOKEN}`,
-      },
-    });
+    console.log();
+    console.log("Fetching base commit...");
+    const baseCommit = await github.git.fetchCommit(...repository, pullRequest.base.sha);
+    const baseTree = await github.git.fetchTree(...repository, baseCommit.tree.sha);
+    console.dir(baseCommit);
+    console.dir(baseTree);
 
-    console.dir(commits[0]);
-
+    console.log();
+    console.log("Fetching head commit...");
+    const headCommit = await github.git.fetchCommit(...repository, pullRequest.head.sha);
+    const headTree = await github.git.fetchTree(...repository, headCommit.tree.sha);
+    console.dir(headCommit);
+    console.dir(headTree);
   }
   catch (err) {
     console.error(err);
