@@ -1,4 +1,4 @@
-import * as github from "./github.js";
+import * as github from "./github/index.js";
 
 main();
 async function main() {
@@ -9,13 +9,17 @@ async function main() {
 
     console.log();
     console.log("Fetching base commit...");
-    const baseCommit = await github.fetchGitCommit('shopstory-ai', 'shopstory', pullRequest.base.sha);
+    const baseCommit = await github.git.fetchCommit('shopstory-ai', 'shopstory', pullRequest.base.sha);
+    const baseTree = await github.git.fetchTree('shopstory-ai', 'shopstory', baseCommit.tree.sha);
     console.dir(baseCommit);
+    console.dir(baseTree);
 
     console.log();
     console.log("Fetching head commit...");
-    const headCommit = await github.fetchGitCommit('shopstory-ai', 'shopstory', pullRequest.head.sha);
+    const headCommit = await github.git.fetchCommit('shopstory-ai', 'shopstory', pullRequest.head.sha);
+    const headTree = await github.git.fetchTree('shopstory-ai', 'shopstory', headCommit.tree.sha);
     console.dir(headCommit);
+    console.dir(headTree);
   }
   catch (err) {
     console.error(err);
