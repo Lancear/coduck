@@ -1,4 +1,4 @@
-import * as github from "./github/index.js";
+import github from "./github/index.js";
 
 main();
 async function main() {

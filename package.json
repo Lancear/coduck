@@ -10,7 +10,9 @@
     "start": "pnpm run compile && node build/index.js"
   },
   "dependencies": {
+    "@octokit/openapi-types": "^16.0.0",
     "@octokit/request": "^6.2.3",
+    "@octokit/types": "^9.0.0",
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
