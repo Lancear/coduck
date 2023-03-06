@@ -1,30 +1,21 @@
-import * as dotenv from "dotenv";
-import { request } from "@octokit/request";
-
-dotenv.config();
+import * as github from "./github.js";
 
 main();
 async function main() {
   try {
-    console.log("Fetching PRs...");
-    const { data: pulls } = await request('GET /repos/{owner}/{repo}/pulls', {
-      headers: {
-        authorization: `token ${process.env.GITHUB_TOKEN}`,
-      },
-      owner: 'shopstory-ai',
-      repo: 'shopstory',
-    });
+    console.log("Fetching pull request...");
+    const pullRequest = await github.fetchPullRequest('shopstory-ai', 'shopstory', 1208);
+    console.dir(pullRequest);
 
-    console.dir(pulls[0]);
+    console.log();
+    console.log("Fetching base commit...");
+    const baseCommit = await github.fetchGitCommit('shopstory-ai', 'shopstory', pullRequest.base.sha);
+    console.dir(baseCommit);
 
-    const { data: commits } = await request(`GET ${pulls[0]._links.commits.href.replace("https://api.github.com", "")}`, {
-      headers: {
-        authorization: `token ${process.env.GITHUB_TOKEN}`,
-      },
-    });
-
-    console.dir(commits[0]);
-
+    console.log();
+    console.log("Fetching head commit...");
+    const headCommit = await github.fetchGitCommit('shopstory-ai', 'shopstory', pullRequest.head.sha);
+    console.dir(headCommit);
   }
   catch (err) {
     console.error(err);
