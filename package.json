@@ -1,0 +1,20 @@
+{
+  "name": "anal-code",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Lancear",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "compile": "tsc",
+    "start": "pnpm run compile && node build/index.js"
+  },
+  "dependencies": {
+    "@octokit/request": "^6.2.3",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.14.5",
+    "typescript": "^4.9.5"
+  }
+}
