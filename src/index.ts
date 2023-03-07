@@ -9,8 +9,9 @@ async function main() {
 
     console.log("Testing database connection...");
     const transaction = db.session({ defaultAccessMode: "WRITE" }).beginTransaction();
-    transaction.run("CREATE (run:Run { timestamp: $timestamp}) RETURN run", { timestamp: new Date().toISOString() });
-    transaction.commit();
+    const result = await transaction.run("CREATE (run:Run { timestamp: $timestamp}) RETURN run", { timestamp: new Date().toISOString() });
+    await transaction.commit();
+    console.dir(result);
 
 
 
