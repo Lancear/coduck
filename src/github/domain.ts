@@ -6,7 +6,7 @@ export type GithubGitTree = components["schemas"]["git-tree"];
 export type GithubPullRequest = components["schemas"]["pull-request"];
 
 export class GithubFetchError extends Error {
-  constructor(response: OctokitResponse<unknown>) {
-    super(`Failed to fetch ${response.url}, received status ${response.status}`);
+  constructor(response: OctokitResponse<unknown>, cause?: Error) {
+    super(`Failed to fetch ${response.url}, received status ${response.status}`, { cause });
   }
 }
