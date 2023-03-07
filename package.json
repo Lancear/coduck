@@ -7,13 +7,15 @@
   "type": "module",
   "scripts": {
     "compile": "tsc",
-    "start": "pnpm run compile && node build/index.js"
+    "start": "pnpm run compile && node build/index.js",
+    "db:start": "docker run -it -p 7687:7687 -p 7444:7444 -p 3000:3000 memgraph/memgraph-platform"
   },
   "dependencies": {
     "@octokit/openapi-types": "^16.0.0",
     "@octokit/request": "^6.2.3",
     "@octokit/types": "^9.0.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "neo4j-driver": "^5.6.0"
   },
   "devDependencies": {
     "@types/node": "^18.14.5",
