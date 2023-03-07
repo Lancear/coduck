@@ -1,8 +1,19 @@
 import github from "./github/index.js";
+import database from "./database/index.js";
 
 main();
 async function main() {
   try {
+    console.log("Connecting to database...");
+    const db = await database.connect();
+
+    console.log("Testing database connection...");
+    const transaction = db.session({ defaultAccessMode: "WRITE" }).beginTransaction();
+    transaction.run("CREATE (run:Run { timestamp: $timestamp}) RETURN run", { timestamp: new Date().toISOString() });
+    transaction.commit();
+
+
+
     const repository = ['shopstory-ai', 'shopstory'] as const;
     const pullRequestNumber = 1208;
 
@@ -26,5 +37,12 @@ async function main() {
   }
   catch (err) {
     console.error(err);
+  }
+  finally {
+    const db = database.getConnection();
+    if (db) {
+      console.log("Closing database connection...");
+      db.close();
+    }
   }
 }
